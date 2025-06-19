@@ -19,6 +19,8 @@ export const Colors = {
     secondary: '#12294b',
     dark: '#151718',
     border: '#e0e0e0',
+    error: '#ff0000',
+    warning: '#ffa500',
   },
   dark: {
     text: '#ECEDEE',
@@ -32,5 +34,7 @@ export const Colors = {
     secondary: '#12294b',
     dark: '#151718',
     border: '#e0e0e0',
+    error: '#ff0000',
+    warning: '#ffa500',
   },
 };

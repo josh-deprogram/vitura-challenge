@@ -23,8 +23,6 @@ export default function HomeScreen() {
     prescriptions,
   } = usePrescriptions() || {};
 
-  console.log('DATA: prescriptions', prescriptions);
-
   const renderItem = ({ item }: { item: Prescription }) => {
     return <ListItem item={item} />;
   };

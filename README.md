@@ -33,6 +33,8 @@ Further time permitted this would expand across the app components
 - List loading state / error / empty state
 - Status filtering
 - Search for a patient
+- App components within features directory (top level components are more generic bootstrap components)
+
 
 ## Assumptions
 - Tested within iOS sim only on development

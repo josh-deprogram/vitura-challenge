@@ -2,7 +2,7 @@ import { Text } from '@/components/Text';
 import { Colors } from '@/config';
 import { Sizes } from '@/config/size';
 import { usePrescription } from '@/hooks/usePrescription';
-import { formatDate } from '@/utils';
+import { formatDate, formattedStatus, statusToColor } from '@/utils';
 import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
@@ -43,7 +43,11 @@ const PrescriptionScreen = () => {
       </View>
       <View style={styles.prescriptionRow}>
         <Text type="defaultSemiBold">Status:</Text>
-        <Text>{currentPrescription?.status}</Text>
+        <Text
+          style={{ color: statusToColor(currentPrescription?.status || '') }}
+        >
+          {formattedStatus(currentPrescription?.status || '')}
+        </Text>
       </View>
     </View>
   );

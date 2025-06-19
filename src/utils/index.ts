@@ -1,4 +1,5 @@
-import { Prescription } from '@/types';
+import { Colors } from '@/config';
+import { Prescription, PrescriptionStatus } from '@/types';
 
 export const formatDate = (date: string | undefined) => {
   if (!date) return '';
@@ -16,4 +17,20 @@ export const sortPrescriptions = (prescriptions: Prescription[]) => {
       new Date(a.datePrescribed).getTime()
     );
   });
+};
+
+export const statusToColor = (status: PrescriptionStatus | '') => {
+  switch (status) {
+    case 'active':
+      return Colors.light.secondary;
+    case 'expired':
+      return Colors.light.error;
+    case 'pending':
+      return Colors.light.warning;
+  }
+};
+
+// Title case the status
+export const formattedStatus = (status: string) => {
+  return status?.charAt(0).toUpperCase() + status?.slice(1);
 };

@@ -1,7 +1,7 @@
 import { Colors } from '@/config';
 import { Sizes } from '@/config/size';
 import { Prescription } from '@/types';
-import { formatDate } from '@/utils';
+import { formatDate, formattedStatus, statusToColor } from '@/utils';
 import { router } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Text } from '../Text';
@@ -42,7 +42,16 @@ export const ListItem = ({ item }: { item: Prescription }) => {
           <Text style={styles.textSmall} type="defaultSemiBold">
             Status:
           </Text>
-          <Text style={styles.textSmall}>{status}</Text>
+          <Text
+            style={[
+              styles.textSmall,
+              {
+                color: statusToColor(status),
+              },
+            ]}
+          >
+            {formattedStatus(status)}
+          </Text>
         </View>
       </View>
       <View style={styles.dateContainer}>
