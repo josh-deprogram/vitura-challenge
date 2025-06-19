@@ -8,6 +8,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
+import { PrescriptionsProvider } from '@/context/PrescriptionsContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function RootLayout() {
@@ -23,19 +24,25 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="prescription/[prescription_id]"
-          options={{
-            headerBackTitle: 'Back',
-            headerShown: true,
-            headerTitle: 'Prescription Detail',
-          }}
-        />
-        <Stack.Screen name="+not-found" options={{ headerShown: false }} />
-      </Stack>
-      <StatusBar style="auto" />
+      <PrescriptionsProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="prescription/[prescription_id]"
+            options={{
+              headerBackTitle: 'Back',
+              headerShown: true,
+              headerTitle: 'Prescription Detail',
+            }}
+          />
+          <Stack.Screen
+            name="search"
+            options={{ headerBackTitle: 'Back', headerShown: true }}
+          />
+          <Stack.Screen name="+not-found" options={{ headerShown: false }} />
+        </Stack>
+        <StatusBar style="auto" />
+      </PrescriptionsProvider>
     </ThemeProvider>
   );
 }

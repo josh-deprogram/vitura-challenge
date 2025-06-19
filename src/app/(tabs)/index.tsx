@@ -2,6 +2,7 @@ import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 
 import { FilterButton } from '@/components/feature/FilterButton';
 import { ListItem } from '@/components/feature/ListItem';
+import { SearchButton } from '@/components/feature/SearchButton';
 import { Text } from '@/components/Text';
 import { Colors } from '@/config';
 import { Sizes } from '@/config/size';
@@ -19,7 +20,10 @@ export default function HomeScreen() {
     setSelectedStatus,
     filteredPrescriptions,
     refreshPrescriptions,
+    prescriptions,
   } = usePrescriptions() || {};
+
+  console.log('DATA: prescriptions', prescriptions);
 
   const renderItem = ({ item }: { item: Prescription }) => {
     return <ListItem item={item} />;
@@ -28,6 +32,8 @@ export default function HomeScreen() {
   const renderListHeaderComponent = () => {
     return (
       <View style={styles.listHeaderContainer}>
+        <SearchButton />
+
         <View style={styles.titleContainer}>
           <Text
             style={{ color: Colors.light.primary, textAlign: 'center' }}
@@ -123,7 +129,9 @@ const styles = StyleSheet.create({
     padding: Sizes.spacing.md,
     flex: 1,
   },
-  titleContainer: {},
+  titleContainer: {
+    paddingTop: Sizes.spacing.sm,
+  },
   listContainer: {},
   descriptionContainer: {},
   loadingContainer: {
