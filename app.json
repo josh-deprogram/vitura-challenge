@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "vitara-health-proto",
-    "slug": "vitara-health-proto",
+    "slug": "vitura-challenge",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.deprogram.viturachallenge",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -37,6 +41,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "219eadb2-6feb-4577-a3a4-b2adb9840052"
+      }
+    },
+    "owner": "deprogram"
   }
 }

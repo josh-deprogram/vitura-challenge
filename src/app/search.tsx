@@ -40,7 +40,7 @@ export default function SearchScreen() {
     <>
       <Stack.Screen options={{ title: 'Search' }} />
       <View style={styles.container}>
-        <Text type="subtitle">Search for a patient medicine.</Text>
+        <Text type="subtitle">Search for a patients medicine:</Text>
         <View style={styles.searchContainer}>
           <TextInput
             placeholder="Search for a patient"

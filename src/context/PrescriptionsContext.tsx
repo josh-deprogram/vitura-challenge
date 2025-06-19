@@ -1,6 +1,12 @@
 import { Prescription, PrescriptionStatus } from '@/types';
 import { sortPrescriptions } from '@/utils';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import mockPrescriptions from '@/api/mock-data/prescriptions.json';
 
@@ -29,12 +35,17 @@ export function PrescriptionsProvider({
   const [selectedStatus, setSelectedStatus] =
     useState<PrescriptionStatus>('all');
 
+  useEffect(() => {
+    fetchPrescriptions();
+  }, []);
+
   const fetchPrescriptions = async () => {
     try {
       await fetch('https://api.vitura.com/prescriptions')
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
+          // Here I would typically be populating the prescriptions from the API,
+          // but for this template app, we'll use the mock data
           const prescriptionsData = data as Prescription[];
           setPrescriptions(sortPrescriptions(prescriptionsData));
         })
@@ -56,14 +67,14 @@ export function PrescriptionsProvider({
     }
   };
 
-  useEffect(() => {
-    fetchPrescriptions();
-  }, []);
-
-  const filteredPrescriptions = prescriptions.filter((prescription) => {
-    if (selectedStatus === 'all') return true;
-    return prescription.status === selectedStatus;
-  });
+  const filteredPrescriptions = useMemo(
+    () =>
+      prescriptions.filter((prescription) => {
+        if (selectedStatus === 'all') return true;
+        return prescription.status === selectedStatus;
+      }),
+    [prescriptions, selectedStatus]
+  );
 
   const value: PrescriptionsContextType = {
     prescriptions,
