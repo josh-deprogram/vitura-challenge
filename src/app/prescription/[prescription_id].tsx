@@ -19,6 +19,12 @@ const PrescriptionScreen = () => {
   return (
     <View style={[styles.container]}>
       {/* <Text>{currentPrescription?.id}</Text> */}
+
+      <View style={styles.prescriptionRow}>
+        <Text type="defaultSemiBold">Patient:</Text>
+        <Text>{currentPrescription?.patient}</Text>
+      </View>
+
       <View style={styles.prescriptionRow}>
         <Text type="defaultSemiBold">Medication:</Text>
         <Text>{currentPrescription?.medication}</Text>
@@ -26,10 +32,6 @@ const PrescriptionScreen = () => {
       <View style={styles.prescriptionRow}>
         <Text type="defaultSemiBold">Pharmacy:</Text>
         <Text>{currentPrescription?.pharmacy}</Text>
-      </View>
-      <View style={styles.prescriptionRow}>
-        <Text type="defaultSemiBold">Patient:</Text>
-        <Text>{currentPrescription?.patient}</Text>
       </View>
       <View style={styles.prescriptionRow}>
         <Text type="defaultSemiBold">Prescriber:</Text>
