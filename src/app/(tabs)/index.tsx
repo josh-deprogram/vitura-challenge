@@ -1,51 +1,123 @@
-import { Image } from 'expo-image';
-import { StyleSheet } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import mockPrescriptions from '@/api/mock-data/prescriptions.json';
+import { ListItem } from '@/components/ListItem';
+import { Text } from '@/components/Text';
+import { Colors } from '@/config';
+import { Sizes } from '@/config/size';
+import { Prescription } from '@/types';
+import React, { useEffect, useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
+  const safeAreaInsets = useSafeAreaInsets();
+  // TODO: Get prescriptions from API
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setError] = useState<boolean>(false);
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
+
+  useEffect(() => {
+    fetchPrescriptions();
+  }, []);
+
+  const fetchPrescriptions = async () => {
+    try {
+      // TODO: Get prescriptions from API (React/Tanstack Query or Fetch)
+      const prescriptionsMock = mockPrescriptions as Prescription[];
+      setPrescriptions(prescriptionsMock);
+    } catch (error) {
+      console.error('Fetch failed:', error);
+      setError(true);
+      setPrescriptions([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const renderItem = ({ item }: { item: Prescription }) => {
+    return <ListItem item={item} />;
+  };
+
+  const renderListHeaderComponent = () => {
+    return (
+      <View style={styles.listHeaderContainer}>
+        <View style={styles.titleContainer}>
+          <Text type="title">Your Prescriptions</Text>
+        </View>
+        <View style={styles.descriptionContainer}>
+          <Text type="subtitle">All your meds in one place</Text>
+        </View>
+      </View>
+    );
+  };
+
+  const renderListEmptyComponent = () => {
+    if (isError) {
+      return (
+        <View style={styles.listEmptyContainer}>
+          <Text>Error retrieving your prescriptions</Text>
+        </View>
+      );
+    }
+    return (
+      <View style={styles.listEmptyContainer}>
+        <Text>No prescriptions available</Text>
+      </View>
+    );
+  };
+
+  const renderListFooterComponent = () => {
+    return <View style={styles.listFooterContainer}></View>;
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <View style={[styles.container, { marginTop: safeAreaInsets.top }]}>
+      {isLoading ? (
+        <>
+          {renderListHeaderComponent()}
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={Colors.light.tint} />
+          </View>
+        </>
+      ) : (
+        <FlatList
+          data={prescriptions}
+          renderItem={renderItem}
+          keyExtractor={(item: Prescription) => item.id}
+          ListEmptyComponent={renderListEmptyComponent}
+          ListHeaderComponent={renderListHeaderComponent}
+          ListFooterComponent={renderListFooterComponent}
         />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Vitara Health</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Things to do</ThemedText>
-        <ThemedText>Fix the structure </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Clean up the UI</ThemedText>
-        <ThemedText>{`Make it nice.`}</ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    padding: Sizes.spacing.md,
+    flex: 1,
+  },
+  titleContainer: {},
+  listContainer: {},
+  descriptionContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: Sizes.spacing.sm,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: -Sizes.spacing.lg * 4,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  listHeaderContainer: {
+    padding: Sizes.spacing.md,
+  },
+  listFooterContainer: {
+    paddingBottom: Sizes.spacing.lg * 3,
+  },
+  listEmptyContainer: {
+    padding: Sizes.spacing.md,
   },
 });
