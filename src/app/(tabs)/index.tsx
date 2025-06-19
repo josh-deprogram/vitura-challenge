@@ -22,9 +22,21 @@ export default function HomeScreen() {
 
   const fetchPrescriptions = async () => {
     try {
-      // TODO: Get prescriptions from API (React/Tanstack Query or Fetch)
-      const prescriptionsMock = mockPrescriptions as Prescription[];
-      setPrescriptions(prescriptionsMock);
+      await fetch('https://api.vitura.com/prescriptions')
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          const prescriptionsMock = data as Prescription[];
+          setPrescriptions(prescriptionsMock);
+        })
+        .catch((error) => {
+          // API is an example above, so we'll use the mock data for this template
+          const prescriptionsMock = mockPrescriptions as Prescription[];
+          setPrescriptions(prescriptionsMock);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     } catch (error) {
       console.error('Fetch failed:', error);
       setError(true);
@@ -42,10 +54,20 @@ export default function HomeScreen() {
     return (
       <View style={styles.listHeaderContainer}>
         <View style={styles.titleContainer}>
-          <Text type="title">Your Prescriptions</Text>
+          <Text
+            style={{ color: Colors.light.primary, textAlign: 'center' }}
+            type="title"
+          >
+            All Prescriptions
+          </Text>
         </View>
         <View style={styles.descriptionContainer}>
-          <Text type="subtitle">All your meds in one place</Text>
+          <Text
+            style={{ color: Colors.light.secondary, textAlign: 'center' }}
+            type="subtitle"
+          >
+            Patients meds all in one place
+          </Text>
         </View>
       </View>
     );
@@ -100,11 +122,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {},
   listContainer: {},
-  descriptionContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Sizes.spacing.sm,
-  },
+  descriptionContainer: {},
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',

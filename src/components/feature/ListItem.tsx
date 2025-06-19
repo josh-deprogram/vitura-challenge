@@ -1,3 +1,4 @@
+import { Colors } from '@/config';
 import { Sizes } from '@/config/size';
 import { Prescription } from '@/types';
 import { router } from 'expo-router';
@@ -21,7 +22,11 @@ export const ListItem = ({ item }: { item: Prescription }) => {
       ]}
     >
       <View style={styles.innerContainer}>
-        <Text>{medication}</Text>
+        <Text type="defaultSemiBold">{medication}</Text>
+        <View style={styles.statusContainer}>
+          <Text type="defaultSemiBold">Status:</Text>
+          <Text>{status}</Text>
+        </View>
       </View>
     </Pressable>
   );
@@ -30,10 +35,14 @@ export const ListItem = ({ item }: { item: Prescription }) => {
 const styles = StyleSheet.create({
   container: {
     padding: Sizes.spacing.md,
+    backgroundColor: Colors.light.light,
+    borderRadius: Sizes.spacing.md,
+    marginBottom: Sizes.spacing.sm,
   },
   innerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  statusContainer: {},
 });

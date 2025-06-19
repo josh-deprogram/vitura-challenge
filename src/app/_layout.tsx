@@ -27,7 +27,11 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen
           name="prescription/[prescription_id]"
-          options={{ headerShown: true, headerTitle: 'Prescription Detail' }}
+          options={{
+            headerBackTitle: 'Back',
+            headerShown: true,
+            headerTitle: 'Prescription Detail',
+          }}
         />
         <Stack.Screen name="+not-found" options={{ headerShown: false }} />
       </Stack>

@@ -2,6 +2,7 @@ import { Link, Stack } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/Text';
+import { Sizes } from '@/config/size';
 import React from 'react';
 
 export default function NotFoundScreen() {
@@ -23,10 +24,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: Sizes.spacing.md,
   },
   link: {
-    marginTop: 15,
-    paddingVertical: 15,
+    marginTop: Sizes.spacing.md,
+    paddingVertical: Sizes.spacing.md,
   },
 });

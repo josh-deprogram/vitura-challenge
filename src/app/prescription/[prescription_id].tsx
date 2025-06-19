@@ -2,6 +2,7 @@ import { Text } from '@/components/Text';
 import { Colors } from '@/config';
 import { Sizes } from '@/config/size';
 import { usePrescription } from '@/hooks/usePrescription';
+import { formatDate } from '@/utils';
 import { useLocalSearchParams } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 
@@ -36,7 +37,7 @@ const PrescriptionScreen = () => {
       </View>
       <View style={styles.prescriptionRow}>
         <Text type="defaultSemiBold">Date Prescribed:</Text>
-        <Text>{currentPrescription?.datePrescribed}</Text>
+        <Text>{formatDate(currentPrescription?.datePrescribed)}</Text>
       </View>
       <View style={styles.prescriptionRow}>
         <Text type="defaultSemiBold">Status:</Text>
@@ -48,15 +49,18 @@ const PrescriptionScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: Sizes.spacing.md,
+    paddingVertical: Sizes.spacing.lg,
+    backgroundColor: Colors.light.light,
+    borderRadius: Sizes.spacing.md,
+    margin: Sizes.spacing.md,
   },
   prescriptionRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: Sizes.spacing.xs,
     borderBottomWidth: 1,
-    borderBottomColor: Colors.light.text,
+    borderBottomColor: Colors.light.border,
     paddingBottom: Sizes.spacing.sm,
   },
 });
