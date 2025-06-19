@@ -10,7 +10,7 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: 'Oh no!' }} />
       <View style={styles.container}>
-        <Text type="title">Vitara Health has gotten lost.</Text>
+        <Text type="title">Vitura Health has gotten lost.</Text>
         <Link href="/" style={styles.link}>
           <Text type="link">Go to home screen!</Text>
         </Link>
