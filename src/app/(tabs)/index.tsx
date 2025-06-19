@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 
 import mockPrescriptions from '@/api/mock-data/prescriptions.json';
-import { ListItem } from '@/components/ListItem';
+import { ListItem } from '@/components/feature/ListItem';
 import { Text } from '@/components/Text';
 import { Colors } from '@/config';
 import { Sizes } from '@/config/size';
