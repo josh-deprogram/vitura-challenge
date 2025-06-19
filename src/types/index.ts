@@ -7,3 +7,5 @@ export type Prescription = {
   status: 'active' | 'expired' | 'pending';
   pharmacy: string;
 };
+
+export type PrescriptionStatus = 'all' | 'active' | 'pending' | 'expired';

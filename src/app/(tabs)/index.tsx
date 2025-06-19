@@ -1,20 +1,23 @@
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 
 import mockPrescriptions from '@/api/mock-data/prescriptions.json';
+import { FilterButton } from '@/components/feature/FilterButton';
 import { ListItem } from '@/components/feature/ListItem';
 import { Text } from '@/components/Text';
 import { Colors } from '@/config';
 import { Sizes } from '@/config/size';
-import { Prescription } from '@/types';
+import { Prescription, PrescriptionStatus } from '@/types';
+import { sortPrescriptions } from '@/utils';
 import React, { useEffect, useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const safeAreaInsets = useSafeAreaInsets();
-  // TODO: Get prescriptions from API
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setError] = useState<boolean>(false);
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
+  const [selectedStatus, setSelectedStatus] =
+    useState<PrescriptionStatus>('all');
 
   useEffect(() => {
     fetchPrescriptions();
@@ -26,13 +29,13 @@ export default function HomeScreen() {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          const prescriptionsMock = data as Prescription[];
-          setPrescriptions(prescriptionsMock);
+          const prescriptionsData = data as Prescription[];
+          setPrescriptions(sortPrescriptions(prescriptionsData));
         })
         .catch((error) => {
           // API is an example above, so we'll use the mock data for this template
           const prescriptionsMock = mockPrescriptions as Prescription[];
-          setPrescriptions(prescriptionsMock);
+          setPrescriptions(sortPrescriptions(prescriptionsMock));
         })
         .finally(() => {
           setIsLoading(false);
@@ -45,6 +48,11 @@ export default function HomeScreen() {
       setIsLoading(false);
     }
   };
+
+  const filteredPrescriptions = prescriptions.filter((prescription) => {
+    if (selectedStatus === 'all') return true;
+    return prescription.status === selectedStatus;
+  });
 
   const renderItem = ({ item }: { item: Prescription }) => {
     return <ListItem item={item} />;
@@ -68,6 +76,32 @@ export default function HomeScreen() {
           >
             Patients meds all in one place
           </Text>
+        </View>
+        <View style={styles.filterContainer}>
+          <FilterButton
+            status="all"
+            label="All"
+            onPress={setSelectedStatus}
+            selectedStatus={selectedStatus}
+          />
+          <FilterButton
+            status="active"
+            label="Active"
+            onPress={setSelectedStatus}
+            selectedStatus={selectedStatus}
+          />
+          <FilterButton
+            status="pending"
+            label="Pending"
+            onPress={setSelectedStatus}
+            selectedStatus={selectedStatus}
+          />
+          <FilterButton
+            status="expired"
+            label="Expired"
+            onPress={setSelectedStatus}
+            selectedStatus={selectedStatus}
+          />
         </View>
       </View>
     );
@@ -103,7 +137,7 @@ export default function HomeScreen() {
         </>
       ) : (
         <FlatList
-          data={prescriptions}
+          data={filteredPrescriptions}
           renderItem={renderItem}
           keyExtractor={(item: Prescription) => item.id}
           ListEmptyComponent={renderListEmptyComponent}
@@ -137,5 +171,11 @@ const styles = StyleSheet.create({
   },
   listEmptyContainer: {
     padding: Sizes.spacing.md,
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: Sizes.spacing.md,
+    paddingHorizontal: Sizes.spacing.sm,
   },
 });
