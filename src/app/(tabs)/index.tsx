@@ -1,58 +1,25 @@
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 
-import mockPrescriptions from '@/api/mock-data/prescriptions.json';
 import { FilterButton } from '@/components/feature/FilterButton';
 import { ListItem } from '@/components/feature/ListItem';
 import { Text } from '@/components/Text';
 import { Colors } from '@/config';
 import { Sizes } from '@/config/size';
-import { Prescription, PrescriptionStatus } from '@/types';
-import { sortPrescriptions } from '@/utils';
-import React, { useEffect, useState } from 'react';
+import { usePrescriptions } from '@/context/PrescriptionsContext';
+import { Prescription } from '@/types';
+import React from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const safeAreaInsets = useSafeAreaInsets();
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setError] = useState<boolean>(false);
-  const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
-  const [selectedStatus, setSelectedStatus] =
-    useState<PrescriptionStatus>('all');
-
-  useEffect(() => {
-    fetchPrescriptions();
-  }, []);
-
-  const fetchPrescriptions = async () => {
-    try {
-      await fetch('https://api.vitura.com/prescriptions')
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          const prescriptionsData = data as Prescription[];
-          setPrescriptions(sortPrescriptions(prescriptionsData));
-        })
-        .catch((error) => {
-          // API is an example above, so we'll use the mock data for this template
-          const prescriptionsMock = mockPrescriptions as Prescription[];
-          setPrescriptions(sortPrescriptions(prescriptionsMock));
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    } catch (error) {
-      console.error('Fetch failed:', error);
-      setError(true);
-      setPrescriptions([]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const filteredPrescriptions = prescriptions.filter((prescription) => {
-    if (selectedStatus === 'all') return true;
-    return prescription.status === selectedStatus;
-  });
+  const {
+    isLoading,
+    isError,
+    selectedStatus,
+    setSelectedStatus,
+    filteredPrescriptions,
+    refreshPrescriptions,
+  } = usePrescriptions() || {};
 
   const renderItem = ({ item }: { item: Prescription }) => {
     return <ListItem item={item} />;
@@ -81,26 +48,26 @@ export default function HomeScreen() {
           <FilterButton
             status="all"
             label="All"
-            onPress={setSelectedStatus}
-            selectedStatus={selectedStatus}
+            onPress={(status) => setSelectedStatus?.(status)}
+            selectedStatus={selectedStatus ?? 'all'}
           />
           <FilterButton
             status="active"
             label="Active"
-            onPress={setSelectedStatus}
-            selectedStatus={selectedStatus}
+            onPress={(status) => setSelectedStatus?.(status)}
+            selectedStatus={selectedStatus ?? 'active'}
           />
           <FilterButton
             status="pending"
             label="Pending"
-            onPress={setSelectedStatus}
-            selectedStatus={selectedStatus}
+            onPress={(status) => setSelectedStatus?.(status)}
+            selectedStatus={selectedStatus ?? 'pending'}
           />
           <FilterButton
             status="expired"
             label="Expired"
-            onPress={setSelectedStatus}
-            selectedStatus={selectedStatus}
+            onPress={(status) => setSelectedStatus?.(status)}
+            selectedStatus={selectedStatus ?? 'expired'}
           />
         </View>
       </View>
@@ -139,6 +106,8 @@ export default function HomeScreen() {
         <FlatList
           data={filteredPrescriptions}
           renderItem={renderItem}
+          onRefresh={refreshPrescriptions}
+          refreshing={isLoading}
           keyExtractor={(item: Prescription) => item.id}
           ListEmptyComponent={renderListEmptyComponent}
           ListHeaderComponent={renderListHeaderComponent}
